@@ -24,7 +24,7 @@ public class FlatMapExample {
 	public static void main(String[] args) {
 		SparkConf conf = new SparkConf().setAppName("FlatMapExample");
 		try (JavaSparkContext sc = new JavaSparkContext(conf)) {
-			JavaRDD<String> words = sc.parallelize(Arrays.asList("Hello", "world"));
+			JavaRDD<String> words = sc.parallelize(Arrays.asList("Hello", null, "world"));
 			System.out.println(StringUtils.join(words.flatMap(new StringToCharsFlatMap()).collect(), ","));
 		}
 	}

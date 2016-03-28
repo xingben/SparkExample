@@ -3,6 +3,8 @@
  */
 package net.xingws.sample.sample.spark.transformation;
 
+import java.util.ArrayList;
+
 import org.apache.spark.api.java.function.FlatMapFunction;
 
 import com.google.common.primitives.Chars;
@@ -20,7 +22,7 @@ public class StringToCharsFlatMap implements FlatMapFunction<String, Character> 
 	 */
 	@Override
 	public Iterable<Character> call(String input) throws Exception {
-		if(input == null) return null;
+		if(input == null) return new ArrayList<Character>();
 		
 		return Chars.asList(input.toCharArray());
 	}
