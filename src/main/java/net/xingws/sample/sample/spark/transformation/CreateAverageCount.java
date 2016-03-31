@@ -13,6 +13,8 @@ import net.xingws.sample.spark.data.AverageCount;
  */
 public class CreateAverageCount implements Function<Integer, AverageCount> {
 
+	private static final long serialVersionUID = 8044281899105594973L;
+
 	@Override
 	public AverageCount call(Integer arg0) throws Exception {
 		// TODO Auto-generated method stub

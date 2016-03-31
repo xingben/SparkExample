@@ -24,4 +24,9 @@ public class AverageCount implements Serializable {
 	public double avg() {
 		return total / (double) num;
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("total=%d num=%d", this.total, this.num);
+	}
 }

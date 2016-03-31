@@ -29,7 +29,6 @@ public class ActionExample {
 			JavaRDD<Integer> rdd = sc.parallelize(Arrays.asList(1, 2, 3, 3));
 			//JavaRDD<Integer> rdd = ordd.cache();
 			rdd.persist(StorageLevel.MEMORY_ONLY());
-			rdd.cache();
 			System.out.println(rdd.reduce((a, b) -> a + b));
 			//rdd = sc.parallelize(Arrays.asList(1, 2, 3, 3));
 			System.out.println(rdd.fold(0, (a, b) -> a + b));

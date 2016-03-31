@@ -25,11 +25,13 @@ public class SinglePairTransformExample {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		SparkConf conf = new SparkConf().setAppName("ActionExample");
+		SparkConf conf = new SparkConf().setAppName("SinglePairTransformExample");
 		try (JavaSparkContext sc = new JavaSparkContext(conf)) {
 			JavaPairRDD<Integer, Integer> pairrdd = sc.parallelizePairs(Arrays.asList(new Tuple2<Integer, Integer>(4,2), 
 					new Tuple2<Integer, Integer>(3, 4), 
-					new Tuple2<Integer, Integer>(3, 6)));
+					new Tuple2<Integer, Integer>(3, 6)),3);
+			
+			System.out.println(pairrdd.getNumPartitions());
 			
 			pairrdd.persist(StorageLevel.MEMORY_ONLY());
 			System.out.println(pairrdd.reduceByKey((a, b) -> Math.max(a, b)).collect());
@@ -38,8 +40,8 @@ public class SinglePairTransformExample {
 			System.out.println(pairrdd.values().collect());
 			System.out.println(pairrdd.mapValues((a)-> (double) a).collect());
 			System.out.println(pairrdd.sortByKey().collect());
-			System.out.println(pairrdd.flatMapValues((a) -> Arrays.asList(a, a+1)));
-			System.out.println(pairrdd.combineByKey(new CreateAverageCount(), new AddAndCount(), new Combine()));
+			System.out.println(pairrdd.flatMapValues((a) -> Arrays.asList(a, a+1)).collect());
+			System.out.println(pairrdd.combineByKey(new CreateAverageCount(), new AddAndCount(), new Combine()).collect());
 			
 			pairrdd.unpersist();
 		}
