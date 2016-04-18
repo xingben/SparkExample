@@ -11,7 +11,6 @@ import java.util.regex.Pattern;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.function.FlatMapFunction;
-import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.Function0;
 import org.apache.spark.api.java.function.Function2;
 import org.apache.spark.api.java.function.PairFunction;
@@ -65,23 +64,6 @@ public class UpdateStateByKeySample {
 		
 		JavaPairDStream<String, Integer> responseCodeCountDStream = wordsDstream.updateStateByKey(new UpdateRunningSum());
 		
-		
-//		JavaPairDStream<String, Integer> duedTaskDStream = responseCodeCountDStream.filter(new Function<Tuple2<String, Integer>, Boolean>() {
-//
-//			private static final long serialVersionUID = 187279696537885485L;
-//
-//			@Override
-//			public Boolean call(Tuple2<String, Integer> element) throws Exception {
-//
-//				if(element._2 == 1) {
-//					return true;
-//				}
-//				
-//				return false;
-//			}
-//			
-//		});
-
 		responseCodeCountDStream.foreachRDD(new VoidFunction<JavaPairRDD<String, Integer>>() {
 
 			private static final long serialVersionUID = -2275569179152601745L;
