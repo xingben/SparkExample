@@ -57,6 +57,13 @@ public class ConnectionPoolSample {
 		
 	    JavaStreamingContext jssc = new JavaStreamingContext(conf, new Duration(10000));
 	    
+	    Runtime.getRuntime().addShutdownHook(new Thread() {
+	    	public void run() {
+	    		jssc.stop();
+   		
+	    	}
+	    });
+	    
 /*        PoolConfiguration poolConfig = new PoolConfiguration();
         poolConfig.setMaxConnection(20);
         poolConfig.setMaxConntionPerRoute(10);
@@ -94,6 +101,6 @@ public class ConnectionPoolSample {
 	    // start our streaming context and wait for it to "finish"
 	    jssc.start();
 	    jssc.awaitTermination();
-	    jssc.stop();
+	  //  jssc.stop();
 	}
 }
