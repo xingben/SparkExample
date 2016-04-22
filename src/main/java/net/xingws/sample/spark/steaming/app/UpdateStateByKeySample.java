@@ -30,7 +30,7 @@ import scala.Tuple2;
  */
 public class UpdateStateByKeySample {
 	private static final Pattern SPACE = Pattern.compile(" ");
-	private static String checkpointDirectory = "/tmp/spark8";
+	private static String checkpointDirectory = "/tmp/spark13";
 	//private static 
 	
 	private static JavaStreamingContext createContext() {
@@ -78,8 +78,6 @@ public class UpdateStateByKeySample {
 					public void call(Iterator<Tuple2<String, Integer>> it) throws Exception {
 						while(it.hasNext()){
 							Tuple2<String, Integer> t = it.next(); 
-							System.out.println(t._1());
-							System.out.println(t._2);
 						}
 					}
 				});	
@@ -87,7 +85,7 @@ public class UpdateStateByKeySample {
 		});
 		
 		responseCodeCountDStream.print();
-		
+			
 		return ssc;
 	}
 	
@@ -122,11 +120,13 @@ class UpdateRunningSum implements Function2<List<Integer>, Optional<Integer>, Op
 		Integer sum = current.or(0);
 		Integer total = sum + nums.size();
 		
-		if(total > 5) {
+		//if(total > 5) {
 
-			return Optional.absent();
-		}
+		//	return Optional.absent();
+		//}
+		System.out.println(total);
 		
 		return Optional.of(total);  
 	}
 }
+
