@@ -1,7 +1,7 @@
 /**
  * 
  */
-package net.xingws.sample.spark.steaming.app;
+package net.xingws.sample.spark.streaming.app;
 
 import java.util.Arrays;
 import java.util.regex.Pattern;

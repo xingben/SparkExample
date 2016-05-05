@@ -1,7 +1,7 @@
 /**
  * 
  */
-package net.xingws.sample.spark.steaming.app;
+package net.xingws.sample.spark.streaming.app;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -33,7 +33,6 @@ public class KafkaSample {
 	    Map<String, Integer> topics = new HashMap<String, Integer>();
 	    topics.put("test", 3);
 	    JavaPairDStream<String, String> input = KafkaUtils.createStream(jssc, "benxing-linux2:2181", "TestGroup", topics);
-	    
 	    input.foreachRDD(new VoidFunction<JavaPairRDD<String, String>>() {
 
 			private static final long serialVersionUID = -5314014090133914774L;

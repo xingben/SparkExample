@@ -1,7 +1,7 @@
 /**
  * 
  */
-package net.xingws.sample.spark.steaming.app;
+package net.xingws.sample.spark.streaming.app;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -24,24 +24,24 @@ import scala.Tuple2;
 
 class Configuration {
 
-	  private static volatile Broadcast<PoolConfiguration> instance = null;
+	private static volatile Broadcast<PoolConfiguration> instance = null;
 
-	  public static Broadcast<PoolConfiguration> getInstance(JavaSparkContext jsc) {
-	    if (instance == null) {
-	      synchronized (Configuration.class) {
-	        if (instance == null) {
-	          PoolConfiguration poolConfig = new PoolConfiguration();
-	          poolConfig.setMaxConnection(20);
-	          poolConfig.setMaxConntionPerRoute(10);
-	          poolConfig.setMonitorCycleTimeout(10000);
-	          poolConfig.setIdleConnectionLifeCycleTimeout(1);
-	          instance = jsc.broadcast(poolConfig);
-	        }
-	      }
-	    }
-	    return instance;
-	  }
+	public static Broadcast<PoolConfiguration> getInstance(JavaSparkContext jsc) {
+		if (instance == null) {
+			synchronized (Configuration.class) {
+				if (instance == null) {
+					PoolConfiguration poolConfig = new PoolConfiguration();
+					poolConfig.setMaxConnection(20);
+					poolConfig.setMaxConntionPerRoute(10);
+					poolConfig.setMonitorCycleTimeout(10000);
+					poolConfig.setIdleConnectionLifeCycleTimeout(1);
+					instance = jsc.broadcast(poolConfig);
+				}
+			}
+		}
+		return instance;
 	}
+}
 
 /**
  * @author benxing
