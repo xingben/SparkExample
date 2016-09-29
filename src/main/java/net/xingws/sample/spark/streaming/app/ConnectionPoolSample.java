@@ -99,8 +99,15 @@ public class ConnectionPoolSample {
 	    //input.print();
 	    
 	    // start our streaming context and wait for it to "finish"
-	    jssc.start();
-	    jssc.awaitTermination();
+		jssc.start();
+		try {
+			jssc.awaitTermination();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			jssc.stop();
+		}
 	  //  jssc.stop();
 	}
 }

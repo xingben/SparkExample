@@ -67,8 +67,9 @@ public class BroadCastSample {
 	
 	/**
 	 * @param args
+	 * @throws InterruptedException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 	    Function0<JavaStreamingContext> createContextFunc = new Function0<JavaStreamingContext>() {
 
 			private static final long serialVersionUID = 234L;

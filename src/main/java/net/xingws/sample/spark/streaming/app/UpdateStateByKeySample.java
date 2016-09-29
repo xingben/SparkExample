@@ -19,8 +19,7 @@ import org.apache.spark.streaming.Durations;
 import org.apache.spark.streaming.api.java.JavaDStream;
 import org.apache.spark.streaming.api.java.JavaPairDStream;
 import org.apache.spark.streaming.api.java.JavaStreamingContext;
-
-import com.google.common.base.Optional;
+import org.apache.spark.api.java.Optional;
 
 import scala.Tuple2;
 
@@ -47,9 +46,9 @@ public class UpdateStateByKeySample {
 			private static final long serialVersionUID = 9138776695249890108L;
 
 			@Override
-			public Iterable<String> call(String x) throws Exception {
+			public Iterator<String> call(String x) throws Exception {
 				// TODO Auto-generated method stub
-				return Arrays.asList(SPACE.split(x));
+				return Arrays.asList(SPACE.split(x)).iterator();
 			}
 		}).mapToPair(new PairFunction<String, String, Integer>() {
 
@@ -91,8 +90,9 @@ public class UpdateStateByKeySample {
 	
 	/**
 	 * @param args
+	 * @throws InterruptedException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 	    Function0<JavaStreamingContext> createContextFunc = new Function0<JavaStreamingContext>() {
 
 			private static final long serialVersionUID = 1L;

@@ -50,7 +50,7 @@ public class WindowSample {
 		//twitterStream.print();
 
 		JavaPairDStream<String, Integer> tuples  = twitterStream.map(status -> status.getText())
-				.flatMap(text -> Arrays.asList(SPACE.split(text)))
+				.flatMap(text -> Arrays.asList(SPACE.split(text)).iterator())
 				.filter(word -> word.startsWith("#"))
 				.mapToPair(hashTag-> new Tuple2<>(hashTag,1));
 		
@@ -86,8 +86,9 @@ public class WindowSample {
 
 	/**
 	 * @param args
+	 * @throws InterruptedException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		Function0<JavaStreamingContext> createContextFunc = new Function0<JavaStreamingContext>() {
 
 			private static final long serialVersionUID = 1L;

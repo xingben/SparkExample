@@ -52,7 +52,15 @@ public class KafkaDirectStreamExample {
 	    
 	    // Start the computation
 	    jssc.start();
-	    jssc.awaitTermination();
+		jssc.start();
+		try {
+			jssc.awaitTermination();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			jssc.stop();
+		}
 	}
 
 }

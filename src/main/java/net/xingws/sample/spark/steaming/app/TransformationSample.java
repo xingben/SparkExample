@@ -31,58 +31,64 @@ public class TransformationSample {
 	 */
 	public static void main(String[] args) {
 		SparkConf conf = new SparkConf().setAppName("TransformationSample");
-		
-	    JavaStreamingContext jssc = new JavaStreamingContext(conf, new Duration(10000));
-	    Map<String, Integer> topics = new HashMap<String, Integer>();
-	    topics.put("test", 1);
-	    JavaPairDStream<String, String> input = KafkaUtils.createStream(jssc, "localhost:2181", "TestGroup", topics);
-	    
-	    
-	    JavaPairDStream<String, String> input1= input.transformToPair(new Function<JavaPairRDD<String, String>, JavaPairRDD<String, String>>() {
 
-			private static final long serialVersionUID = 1L;
+		JavaStreamingContext jssc = new JavaStreamingContext(conf, new Duration(10000));
+		Map<String, Integer> topics = new HashMap<String, Integer>();
+		topics.put("test", 1);
+		JavaPairDStream<String, String> input = KafkaUtils.createStream(jssc, "localhost:2181", "TestGroup", topics);
 
-			@Override
-			public JavaPairRDD<String, String> call(JavaPairRDD<String, String> rdd) throws Exception {
-				// TODO Auto-generated method stub
-				return rdd.filter(new Function<Tuple2<String, String>, Boolean>() {
+		JavaPairDStream<String, String> input1 = input
+				.transformToPair(new Function<JavaPairRDD<String, String>, JavaPairRDD<String, String>>() {
 
-					private static final long serialVersionUID = 3471158106896307910L;
+					private static final long serialVersionUID = 1L;
 
 					@Override
-					public Boolean call(Tuple2<String, String> tuple) throws Exception {
+					public JavaPairRDD<String, String> call(JavaPairRDD<String, String> rdd) throws Exception {
 						// TODO Auto-generated method stub
-						return tuple._1().startsWith("key1") ;
+						return rdd.filter(new Function<Tuple2<String, String>, Boolean>() {
+
+							private static final long serialVersionUID = 3471158106896307910L;
+
+							@Override
+							public Boolean call(Tuple2<String, String> tuple) throws Exception {
+								// TODO Auto-generated method stub
+								return tuple._1().startsWith("key1");
+							}
+
+						});
 					}
-					
+
 				});
-			}
-	    	
-	    });
-	    
-	    input1.print();
-	    System.out.println(input1.repartition(10));
-	    
-	    List<Tuple2<String, String>> result = new ArrayList<Tuple2<String, String>>();
-	    
-	    input1.foreachRDD(new VoidFunction<JavaPairRDD<String, String>>() {
+
+		input1.print();
+		System.out.println(input1.repartition(10));
+
+		List<Tuple2<String, String>> result = new ArrayList<Tuple2<String, String>>();
+
+		input1.foreachRDD(new VoidFunction<JavaPairRDD<String, String>>() {
 
 			private static final long serialVersionUID = -8426501670149908775L;
 
 			@Override
 			public void call(JavaPairRDD<String, String> rdd) throws Exception {
-				
+
 				result.addAll(rdd.collect());
 				System.out.println(result.size());
 			}
-	    });
-	    
-	    //input.print();
-	    System.out.println(result.size());
-	    
-	    // start our streaming context and wait for it to "finish"
-	    jssc.start();
-	    jssc.awaitTermination();
-	    jssc.stop();
+		});
+
+		// input.print();
+		System.out.println(result.size());
+
+		// start our streaming context and wait for it to "finish"
+		jssc.start();
+		try {
+			jssc.awaitTermination();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			jssc.stop();
+		}
 	}
 }

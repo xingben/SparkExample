@@ -28,12 +28,13 @@ public class KafkaSample {
 	 */
 	public static void main(String[] args) {
 		SparkConf conf = new SparkConf().setAppName("KafkaSample");
-		
-	    JavaStreamingContext jssc = new JavaStreamingContext(conf, new Duration(10000));
-	    Map<String, Integer> topics = new HashMap<String, Integer>();
-	    topics.put("test", 3);
-	    JavaPairDStream<String, String> input = KafkaUtils.createStream(jssc, "benxing-linux2:2181", "TestGroup", topics);
-	    input.foreachRDD(new VoidFunction<JavaPairRDD<String, String>>() {
+
+		JavaStreamingContext jssc = new JavaStreamingContext(conf, new Duration(10000));
+		Map<String, Integer> topics = new HashMap<String, Integer>();
+		topics.put("test", 3);
+		JavaPairDStream<String, String> input = KafkaUtils.createStream(jssc, "benxing-linux2:2181", "TestGroup",
+				topics);
+		input.foreachRDD(new VoidFunction<JavaPairRDD<String, String>>() {
 
 			private static final long serialVersionUID = -5314014090133914774L;
 
@@ -45,24 +46,30 @@ public class KafkaSample {
 
 					@Override
 					public void call(Iterator<Tuple2<String, String>> messages) throws Exception {
-						while(messages.hasNext()) {
+						while (messages.hasNext()) {
 							Tuple2<String, String> message = messages.next();
 							System.out.println(message._2);
 						}
-							
+
 					}
-					
+
 				});
 			}
-	    	
-	    });
-	    
-	    //input.print();
-	    
-	    // start our streaming context and wait for it to "finish"
-	    jssc.start();
-	    jssc.awaitTermination();
-	    jssc.stop();
+
+		});
+
+		// input.print();
+
+		// start our streaming context and wait for it to "finish"
+		jssc.start();
+		try {
+			jssc.awaitTermination();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			jssc.stop();
+		}
 	}
 
 }

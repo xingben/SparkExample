@@ -4,6 +4,7 @@
 package net.xingws.sample.sample.spark.transformation;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.apache.spark.api.java.function.FlatMapFunction;
 
@@ -21,10 +22,10 @@ public class StringToCharsFlatMap implements FlatMapFunction<String, Character> 
 	 * @see org.apache.spark.api.java.function.FlatMapFunction#call(java.lang.Object)
 	 */
 	@Override
-	public Iterable<Character> call(String input) throws Exception {
-		if(input == null) return new ArrayList<Character>();
+	public Iterator<Character> call(String input) throws Exception {
+		if(input == null) return new ArrayList<Character>().iterator();
 		
-		return Chars.asList(input.toCharArray());
+		return Chars.asList(input.toCharArray()).iterator();
 	}
 
 }

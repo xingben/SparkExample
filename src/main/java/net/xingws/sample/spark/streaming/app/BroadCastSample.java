@@ -72,9 +72,15 @@ public class BroadCastSample {
 	    //input.print();
 	    
 	    // start our streaming context and wait for it to "finish"
-	    jssc.start();
-	    jssc.awaitTermination();
-	    jssc.stop();
+		jssc.start();
+		try {
+			jssc.awaitTermination();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			jssc.stop();
+		}
 
 	}
 

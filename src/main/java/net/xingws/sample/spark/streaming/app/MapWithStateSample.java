@@ -6,23 +6,16 @@ package net.xingws.sample.spark.streaming.app;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.regex.Pattern;
 
 import org.apache.spark.SparkConf;
-import org.apache.spark.api.java.function.FlatMapFunction;
-import org.apache.spark.api.java.function.Function;
-import org.apache.spark.api.java.function.Function0;
-import org.apache.spark.api.java.function.Function3;
-import org.apache.spark.api.java.function.PairFunction;
+import org.apache.spark.api.java.function.*;
 import org.apache.spark.streaming.Durations;
+import org.apache.spark.api.java.Optional;
 import org.apache.spark.streaming.State;
 import org.apache.spark.streaming.StateSpec;
-import org.apache.spark.streaming.api.java.JavaDStream;
-import org.apache.spark.streaming.api.java.JavaMapWithStateDStream;
-import org.apache.spark.streaming.api.java.JavaPairDStream;
-import org.apache.spark.streaming.api.java.JavaStreamingContext;
-
-import com.google.common.base.Optional;
+import org.apache.spark.streaming.api.java.*;
 
 import scala.Tuple2;
 
@@ -51,9 +44,9 @@ public class MapWithStateSample implements Serializable {
 			private static final long serialVersionUID = 9138776695249890108L;
 
 			@Override
-			public Iterable<String> call(String x) throws Exception {
+			public Iterator<String> call(String x) throws Exception {
 				// TODO Auto-generated method stub
-				return Arrays.asList(SPACE.split(x));
+				return Arrays.asList(SPACE.split(x)).iterator();
 			}
 		}).mapToPair(new PairFunction<String, String, Integer>() {
 
@@ -76,7 +69,7 @@ public class MapWithStateSample implements Serializable {
 					@Override
 					public Tuple2<String, Integer> call(String key, Optional<Integer> value, State<MapState> state)
 							throws Exception {
-						int v = value.or(0) + (state.exists() ? state.get().getValue() : 0);
+						int v = value.orElse(0) + (state.exists() ? state.get().getValue() : 0);
 						long time = (new Date().getTime());
 						MapWithStateSample sample = new MapWithStateSample();
 						if(state.isTimingOut()) {
@@ -128,7 +121,12 @@ public class MapWithStateSample implements Serializable {
 
 	      JavaStreamingContext ssc = JavaStreamingContext.getOrCreate(checkpointDirectory, createContextFunc);
 	      ssc.start();
-	      ssc.awaitTermination();
+	      try {
+			ssc.awaitTermination();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 	
