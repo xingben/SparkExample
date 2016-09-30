@@ -42,7 +42,7 @@ public class DataFrameExample {
 		df.createOrReplaceTempView("view");
 		spark.sql("select * from view where age < 50 and name = 'Andy'").show();
 		
-		df.write().parquet("/home/benxing/Applications/spark-2.0.0-bin-hadoop2.6/output/test");
+		df.write().json("/home/benxing/Applications/spark-2.0.0-bin-hadoop2.6/output/jsontest");
 	}
 
 }
